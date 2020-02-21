@@ -1,10 +1,12 @@
 import React from "react";
 
-const List = ({ listItems }) => {
+const List = ({ currentItem }) => {
   return (
     <>
-      <h4> Liste de courses: </h4>
-      <p>{listItems[0]}</p>
+      <aside>
+        <h4> Liste de courses: </h4>
+        <p>{currentItem.french}</p>
+      </aside>
     </>
   );
 };

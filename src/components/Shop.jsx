@@ -7,7 +7,6 @@ const Shop = props => {
         {props.shopItems.map(item => {
           return (
             <section key={item.english}>
-              {console.log(item)}
               <img
                 src={item.img}
                 alt={item.english}
