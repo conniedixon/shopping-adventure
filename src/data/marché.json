@@ -1,0 +1,19 @@
+{
+  "shopItems": [
+    {
+      "english": "Apple",
+      "french": "Une pomme",
+      "img": "/assets/pomme.jpeg"
+    },
+    {
+      "english": "Potato",
+      "french": "Une pomme de terre",
+      "img": "/assets/pommedeterre.jpeg"
+    },
+    {
+      "english": "Peach",
+      "french": "Une pêche",
+      "img": "/assets/cpeach.jpeg"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "shopItems": [
+    {
+      "english": "Baguette",
+      "french": "Une baguette",
+      "img": "/assets/baguette.jpeg"
+    },
+    {
+      "english": "Eclair",
+      "french": "Un eclair",
+      "img": "/assets/eclair.png"
+    },
+    {
+      "english": "Croissant",
+      "french": "Un croissant",
+      "img": "/assets/croissant.jpg"
+    },
+    {
+      "english": "Pain au chocolat",
+      "french": "Un pain au chocolat",
+      "img": "/assets/painauchocolat.png"
+    },
+    {
+      "english": "Macaron",
+      "french": "Un macaron",
+      "img": "/assets/macaron.jpeg"
+    },
+    {
+      "english": "Madeleine",
+      "french": "Une madeleine",
+      "img": "/assets/madeleine.jpg"
+    },
+    {
+      "english": "Biscuit",
+      "french": "Un biscuit",
+      "img": "/assets/biscuit.png"
+    }
+  ]
+}

@@ -3,8 +3,8 @@ import React from "react";
 const List = ({ currentItem }) => {
   return (
     <>
-      <aside>
-        <h4> Liste de courses: </h4>
+      <aside id="list">
+        <h3> Liste de courses: </h3>
         <p>{currentItem.french}</p>
       </aside>
     </>

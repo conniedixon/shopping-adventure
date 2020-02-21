@@ -1,64 +1,35 @@
 import React from "react";
 import "./App.css";
-import Croissant from "./assets/croissant.jpg";
-import Biscuit from "./assets/biscuit.png";
-import Baguette from "./assets/baguette.jpeg";
-import Macaron from "./assets/macaron.jpeg";
-import PainAuChocolat from "./assets/painauchocolat.png";
+import boulangerie from "./data/boulangerie.json";
+import marché from "./data/marché.json";
 
 import Shop from "./components/Shop";
-// import Basket from "./components/Basket";
 import List from "./components/List";
+import Basket from "./components/Basket";
+import Story from "./components/Story";
 
 class App extends React.Component {
   state = {
     currentItem: {
       english: "Baguette",
       french: "Une baguette",
-      img: Baguette
+      img: "bg"
     },
-    shopItems: [
-      {
-        english: "Baguette",
-        french: "Une baguette",
-        img: Baguette
-      },
-      {
-        english: "Eclair",
-        french: "Un eclair",
-        img:
-          "https://laduree-laduree-fr-storage.omn.proximis.com/Imagestorage/imagesSynchro/540/405/1da267c93ec833de057e01551144fd1f0bc07135_image-6016-1.png"
-      },
-      {
-        english: "Croissant",
-        french: "Un croissant",
-        img: Croissant
-      },
-      {
-        english: "Pain au chocolat",
-        french: "Un pain au chocolat",
-        img: PainAuChocolat
-      },
-      {
-        english: "Macaron",
-        french: "Un macaron",
-        img: Macaron
-      },
-      {
-        english: "Madeleine",
-        french: "Une madeleine",
-        img:
-          "https://cdn.shopify.com/s/files/1/0006/7698/6938/products/Madeleines_bg_yellow_2048x.jpg?v=1564443850"
-      },
-      {
-        english: "Biscuit",
-        french: "Un biscuit",
-        img: Biscuit
-      }
-    ],
-    lives: [null, null, null],
+    shopItems: [],
+    levels: { 1: boulangerie, 2: marché },
     basketItems: []
   };
+
+  componentDidMount() {
+    this.setState(
+      currentState => {
+        return { shopItems: currentState.levels[1].shopItems };
+      },
+      () => {
+        this.setCurrentItem();
+      }
+    );
+  }
 
   randomiseList = list => {
     return [...list].sort((item1, item2) => {
@@ -66,10 +37,36 @@ class App extends React.Component {
     });
   };
 
-  setCurrentItem = () => {
-    const newCurrentItem = this.randomiseList(this.state.shopItems)[0];
+  moveCurrentItemToBasket = CB => {
     this.setState(currentState => {
+      return {
+        basketItems: [...currentState.basketItems, currentState.currentItem],
+        shopItems: [...currentState.shopItems].filter(
+          item => item.english !== currentState.currentItem.english
+        )
+      };
+    }, CB);
+  };
+
+  progressLevel = () => {
+    this.setState(currentState => {
+      return { currentLevel: currentState.currentLevel++ };
+    });
+  };
+
+  setCurrentItem = () => {
+    this.setState(currentState => {
+      if (currentState.listItems.length === 0) {
+        this.progressLevel();
+      }
+      const newCurrentItem = this.randomiseList(this.state.shopItems)[0];
       return { currentItem: newCurrentItem };
+    });
+  };
+
+  setMessage = message => {
+    this.setState(currentState => {
+      return { message };
     });
   };
 
@@ -79,34 +76,34 @@ class App extends React.Component {
       item => item.english === target.alt
     );
     if (chosenItem.english === this.state.currentItem.english) {
-      this.setCurrentItem();
+      this.moveCurrentItemToBasket(this.setCurrentItem);
+      this.setMessage("Tres bien! \u2713");
       console.log("correct :)");
     } else {
       console.log("Booo idiot, don't you know french?! ");
+      this.setMessage("Mais non! Réessayez \u2718");
     }
   };
 
-  // setCurrentItem = item => {
-  //   this.setState(currentState => {
-  //     return {
-  //       currentItem: item
-  //     };
-  //   });
-  // };
-
   render() {
+    console.log(this.state.levels[1]);
     return (
       <>
         <header>
           <h1>Shopping Adventure</h1>
           <h3>Allons faire du shopping!</h3>
         </header>
-        <List currentItem={this.state.currentItem} />
+        <Story />
         <Shop
           shopItems={this.randomiseList(this.state.shopItems)}
           handleAttempt={this.handleAttempt}
         />
-        {/* <Basket basketItems={this.state.basketItems} /> */}
+        <List
+          currentItem={this.state.currentItem}
+          basketItems={this.state.basketItems}
+        />
+        {this.state.message && <p id="message">{this.state.message}</p>}
+        <Basket basketItems={this.state.basketItems} />
       </>
     );
   }

@@ -15,9 +15,10 @@ code {
 #root {
   display: grid;
   grid-template-columns: 60% 40%;
-  grid-template-rows: 15% 70% 15%;
-  grid-template-areas: "a a" "b c" "d d";
+  grid-template-rows: 15% 15% 20% 15% 25%;
+  grid-template-areas: "a a" "b b" "c d" "c e" "c f";
   grid-gap: 10px;
+  padding: 50px;
 }
 
 header {
@@ -25,19 +26,35 @@ header {
   text-align: center;
 }
 
-main {
+#story {
   grid-area: b;
+  text-align: center;
+  padding: 0px 30px 0px 30px;
+}
+
+#story p {
+  font-style: italic;
+}
+
+main {
+  grid-area: c;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
 
-aside {
-  grid-area: c;
+#list {
+  grid-area: d;
   text-align: center;
 }
 
-footer {
-  grid-area: d;
+#message {
+  grid-area: e;
+  text-align: center;
+}
+
+#basket {
+  grid-area: f;
+  text-align: center;
 }
 
 img {
