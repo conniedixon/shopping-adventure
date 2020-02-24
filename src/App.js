@@ -10,26 +10,31 @@ import Story from "./components/Story";
 
 class App extends React.Component {
   state = {
-    currentItem: {
-      english: "Baguette",
-      french: "Une baguette",
-      img: "bg"
+    defaultCurrentItem: {
+      english: "DefaultItem",
+      french: "",
+      img: ""
     },
+    currentItem: this.defaultCurrentItem,
     shopItems: [],
     levels: { 1: boulangerie, 2: marché },
+    currentLevel: 1,
     basketItems: []
   };
 
   componentDidMount() {
-    this.setState(
-      currentState => {
-        return { shopItems: currentState.levels[1].shopItems };
-      },
-      () => {
-        this.setCurrentItem();
-      }
-    );
+    this.setShopItems();
   }
+
+  componentDidUpdate() {}
+
+  setShopItems = level => {
+    this.setState(currentState => {
+      return {
+        shopItems: currentState.levels[currentState.currentLevel].shopItems
+      };
+    }, this.setCurrentItem);
+  };
 
   randomiseList = list => {
     return [...list].sort((item1, item2) => {
@@ -48,17 +53,14 @@ class App extends React.Component {
     }, CB);
   };
 
-  progressLevel = () => {
+  progressLevel = CB => {
     this.setState(currentState => {
-      return { currentLevel: currentState.currentLevel++ };
-    });
+      return { currentLevel: ++currentState.currentLevel };
+    }, CB);
   };
 
   setCurrentItem = () => {
     this.setState(currentState => {
-      if (currentState.listItems.length === 0) {
-        this.progressLevel();
-      }
       const newCurrentItem = this.randomiseList(this.state.shopItems)[0];
       return { currentItem: newCurrentItem };
     });
@@ -75,10 +77,21 @@ class App extends React.Component {
     const chosenItem = this.state.shopItems.find(
       item => item.english === target.alt
     );
-    if (chosenItem.english === this.state.currentItem.english) {
+    if (
+      chosenItem.english === this.state.currentItem.english &&
+      this.state.shopItems.length > 1
+    ) {
       this.moveCurrentItemToBasket(this.setCurrentItem);
       this.setMessage("Tres bien! \u2713");
       console.log("correct :)");
+    } else if (
+      chosenItem.english === this.state.currentItem.english &&
+      this.state.shopItems.length === 1
+    ) {
+      this.moveCurrentItemToBasket(this.setCurrentItem);
+      this.setMessage(
+        "Bien joué! votre panier est plein. Cliquez ici pour passer au niveau suivant."
+      );
     } else {
       console.log("Booo idiot, don't you know french?! ");
       this.setMessage("Mais non! Réessayez \u2718");
@@ -86,7 +99,6 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.levels[1]);
     return (
       <>
         <header>
@@ -99,8 +111,7 @@ class App extends React.Component {
           handleAttempt={this.handleAttempt}
         />
         <List
-          currentItem={this.state.currentItem}
-          basketItems={this.state.basketItems}
+          currentItem={this.state.currentItem || this.state.defaultCurrentItem}
         />
         {this.state.message && <p id="message">{this.state.message}</p>}
         <Basket basketItems={this.state.basketItems} />
